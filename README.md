@@ -26,11 +26,11 @@ The putative HPV nucleotide sequences are compared to a database of known HPV se
 
 Example of output: (HPVchimera_results.txt)
 
-    Name of 1st contig  NO_chimera  HPV85 
-    Name of 2nd contig  Chimera Contig sequence does not show any similarity to any HPV type given.
-    Name of 3rd contig  Chimera The sequence aligns to 2 different HPV types with same bitscore.
-    Name of 4th contig  Chimera Contig sequence does not show >85% sequence identity to any HPV type given.
-    Name of 5th contig  Chimera At least one contig segment sequence does not show any similarity to any HPV type given.
-    Name of 6th contig  Chimera At least one sequence segment aligns to 2 different HPV types with same bitscore.
-    Name of 7th contig  Chimera At least one contig segment does not show >85% sequence identity to any HPV type given.
-    Name of 8th contig  Chimera The top hit alignment does not cover >70% of contigs segment sequence.
+    Name of 1st contig;  NO_chimera;  HPV85 
+    Name of 2nd contig;  Chimera; Contig sequence does not show any similarity to any HPV type given.
+    Name of 3rd contig;  Chimera; The sequence aligns to 2 different HPV types with same bitscore.
+    Name of 4th contig;  Chimera; Contig sequence does not show >85% sequence identity to any HPV type given.
+    Name of 5th contig;  Chimera; At least one contig segment sequence does not show any similarity to any HPV type given.
+    Name of 6th contig;  Chimera; At least one sequence segment aligns to 2 different HPV types with same bitscore.
+    Name of 7th contig;  Chimera; At least one contig segment does not show >85% sequence identity to any HPV type given.
+    Name of 8th contig;  Chimera; The top hit alignment does not cover >70% of contigs segment sequence.
