@@ -18,7 +18,7 @@ if [ `ls -l "$workspace"/"$folder"/"$file" | awk '{print $5}'` -eq 0 ]
 then
    filename=$(echo $2| awk -F ".ordered" '{print $1}')
    echo "File: $file -> Chimera: Contig sequence does not show any similarity to any HPV type given: Blaclisted"
-   echo "$file -> Chimera: Contig sequence does not show any similarity to any HPV type given">>$result_file
+   echo -e "$file; ->; Chimera; Contig sequence does not show any similarity to any HPV type given">>$result_file
    echo "$file" "Step1" >>$blacklisted
 else
   bit_score=`cat "$workspace"/"$folder"/"$file" | head -1 | awk '{print $3}'`
@@ -26,7 +26,7 @@ else
   then
     filename=$(echo $2| awk -F ".ordered" '{print $1}')
     echo "File: $file -> Chimera: Contig sequence does not show >85% sequence identity to any HPV type given.: Blacklisted"
-    echo "$file -> Chimera: Contig sequence does not show >85% sequence identity to any HPV type given.">>$result_file
+    echo -e "$file; ->; Chimera; Contig sequence does not show >85% sequence identity to any HPV type given.">>$result_file
     echo "$file" "Step2">>$blacklisted
   fi
 fi
@@ -44,7 +44,7 @@ if [ `ls -l "$workspace"/"$folder"/"$file" | awk '{print $5}'` -eq 0 ]
 then
    filename=$(echo $2| awk -F ".ordered" '{print $1}')
    echo "File: $file -> Chimera: At least one contig segment sequence does not show any similarity to any HPV type given: Blaclisted"
-   echo "$file -> Chimera: At least one contig segment does not show any similarity to any HPV type given">>$result_file
+   echo -e "$file; ->; Chimera;  At least one contig segment does not show any similarity to any HPV type given">>$result_file
    echo "$file" "Step 8" >>$blacklisted
 else
   bit_score=`cat "$workspace"/"$folder"/"$file" | head -1 | awk '{print $3}'`
@@ -52,7 +52,7 @@ else
   then
     filename=$(echo $2| awk -F ".ordered" '{print $1}')
     echo "File: $file -> Chimera: At least one contig segment does not show >85% sequence identity to any HPV type given.: Blacklisted"
-    echo "$file -> Chimera: At least one contig segment does not show >85% sequence identity to any HPV type given.">>$result_file
+    echo -e "$file; ->; Chimera; At least one contig segment does not show >85% sequence identity to any HPV type given.">>$result_file
     echo "$file" "Step 9">>$blacklisted
   fi
 fi
@@ -85,14 +85,14 @@ check_coverage()
       echo "$value" "-lt" "$value_to_discriminate"  $filename
       if [ "$value" -lt "$value_to_discriminate" ]; then
         echo "$filename -> Chimera: $value: Blacklisted"
-        echo "$filename -> Chimera: The top hit alignment does not cover >60% of contigs sequence ">>$result_file
+        echo -e "$filename; ->; Chimera;  The top hit alignment does not cover >60% of contigs sequence ">>$result_file
         echo "$filename" "Step 3">>$blacklisted
       else
         echo "$filename_unique -> NO Chimera: $value"
       fi
    else
      echo "$filename_unique -> Chimera: The top hit alignment does not cover >60% of contigs sequence"
-     echo "$filename_unique -> Chimera: The top hit alignment does not cover >60% of contigs sequence">>$result_file
+     echo -e "$filename_unique; ->; Chimera;  The top hit alignment does not cover >60% of contigs sequence">>$result_file
      echo "$filename" "Step 4">>$blacklisted
    fi
  fi
@@ -119,14 +119,14 @@ check_coverage_div()
       echo "$value" "-lt" "$value_to_discriminate_div"  $filename
       if [ "$value" -lt "$value_to_discriminate_div" ]; then
         echo "$filename -> Chimera: $value: Blacklisted"
-        echo "$filename -> Chimera: The top hit alignment does not cover >70% of contigs segment sequence ">>$result_file
+        echo -e "$filename; ->; Chimera;  The top hit alignment does not cover >70% of contigs segment sequence ">>$result_file
         echo "$filename" "Step 10">>$blacklisted
       else
         echo "$filename_unique -> NO Chimera: $value"
       fi
    else
      echo "$filename_unique -> Chimera: The top hit alignment does not cover >70% of contigs segment sequence"
-     echo "$filename_unique -> Chimera: The top hit alignment does not cover >70% of contigs segment sequence">>$result_file
+     echo -e "$filename_unique; ->; Chimera;  The top hit alignment does not cover >70% of contigs segment sequence">>$result_file
      echo "$filename" "Step 11">>$blacklisted
    fi
  fi
@@ -177,7 +177,7 @@ else
      cat ""$workspace"/"$folder"/"$filename.fa.ordered"" | head -$count >"$workspace"/"$folder"/"$filename"_unique.out
      echo -e "Unique head for $filename"
    else
-     echo "$filename -> Chimera: The sequence aligns to 2 different HPV types with same bitscore">>$result_file
+     echo -e "$filename; ->; Chimera;  The sequence aligns to 2 different HPV types with same bitscore">>$result_file
      echo "$filename -> Chimera: The sequence aligns to 2 different HPV types with same bitscore: Blacklisted"
      echo "$filename" "Step 5">>$blacklisted
    fi
@@ -232,7 +232,7 @@ else
      cat "$workspace"/"$folder"/"$file" | head -$count > "$workspace"/"$folder"/"$file"_unique.out
      echo -e "Unique head for $filename"
    else
-     echo "$filename -> Chimera: At least one sequence segment aligns to 2 different HPV types with same bitscore">>$result_file
+     echo -e "$filename; ->; Chimera;  At least one sequence segment aligns to 2 different HPV types with same bitscore">>$result_file
      echo "$filename -> Chimera: At least one sequence segment aligns to 2 different HPV types with same bitscore: Blacklisted"
      echo "$filename" "Step 12">>$blacklisted
    fi
@@ -306,13 +306,14 @@ last_check()
 echo "----------last check---------"
 isblacklisted=`cat "$blacklisted" | grep "$filename"| wc -l`
 folder=$1
+HPV_type_original=$(cat "$filename"/"$filename"_unique.out| awk -F " " '{print $2}')
 
 if [ $isblacklisted -eq "1" ]; then
   echo "$filename is blacklisted, this file will not continue"
 else
 
- echo "$folder -> $HPV_type_original, no chimera detected">>$result_file
- echo "$folder -> $HPV_type_original, no chimera detected"
+ echo -e "$folder; ->; NO_chimera; $HPV_type_original">>$result_file
+ echo "$folder -> NO_chimera, $HPV_type_original"
 fi
 }
 
@@ -320,10 +321,11 @@ fi
 
 
 extract_id_indivial_files() {
-cat $fasta_file | sed 's/ //g' |sed 's/;//g' |sed 's/{//g'|sed 's/}//g'|sed 's/\]//g'|sed 's/_//g'|sed 's/\[//g'|sed 's/://g'|sed 's/\,//g' |sed 's/(//g'| sed 's/)//g'|sed 's/\.//g' | sed 's/\-//g' | sed 's/\|//g' |   sed 's/\///g' | sed 's/|//g'|cut -c -100 |sed $'s/[^[:print:]\t]//g' |awk '{if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")}print $0 > filename}'
+cat $fasta_file | sed 's/ //g' |sed 's/;//g' |sed 's/{//g'|sed 's/}//g'|sed 's/\]//g'|sed 's/_//g'|sed 's/\[//g'|sed 's/://g'|sed 's/\,//g' |sed 's/(//g'| sed 's/)//g'|sed 's/\.//g' | sed 's/\-//g' | sed 's/\|//g' |   sed 's/\///g' | sed 's/|//g'|cut -c -100 |sed $'s/[^[:print:]\t]//g' |awk 'BEGIN{filename=""}{if (substr($0, 1, 1)==">") {close(filename); filename=(substr($0,2) ".fa")}print $0 > filename}'
 
 cd  $folder_database_to_single_fasta
-cat $folder_database_to_single_fasta/$hpv_database_file_name| sed 's/ //g' |sed 's/;//g' |sed 's/{//g'|sed 's/}//g'|sed 's/\]//g'|sed 's/_//g'|sed 's/\[//g'|sed 's/://g'|sed 's/\,//g' |sed 's/(//g'| sed 's/)//g'|sed 's/\.//g' | sed 's/\-//g' | sed 's/\|//g' |   sed 's/\///g' | sed 's/|//g'|cut -c -100 |sed $'s/[^[:print:]\t]//g' |awk '{if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")}print $0 > filename}'
+cat $folder_database_to_single_fasta/$hpv_database_file_name| sed 's/ //g' |sed 's/;//g' |sed 's/{//g'|sed 's/}//g'|sed 's/\]//g'|sed 's/_//g'|sed 's/\[//g'|sed 's/://g'|sed 's/\,//g' |sed 's/(//g'| sed 's/)//g'|sed 's/\.//g' | sed 's/\-//g' | sed 's/\|//g' |   sed 's/\///g' | sed 's/|//g'|cut -c -100 |sed $'s/[^[:print:]\t]//g' |awk 'BEGIN{filename=""}{if (substr($0, 1, 1)==">") {close(filename); filename=(substr($0,2) ".fa")}print $0 > filename}'
+
 
 cd $folder_to_start/chimera/workspace
 rm -rf $folder_database_to_single_fasta/$hpv_database_file_name
@@ -378,7 +380,7 @@ final()
 {
   echo "HPV Chimera Check Finished"
   echo "-------------------------"
-  echo "Check result in: "$folder_to_start"chimera/HPVchimera_results.txt"
+  echo "Check result in: "$folder_to_start"/chimera/HPVchimera_results.txt"
   echo "Check files blacklisted in "$blacklisted""
 }
 
